@@ -1,23 +1,23 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const postSchema = mongoose.Schema({
     title:{
         type: String,
-        required: [true, "title is required!"],
+        required: [true, 'title is required!'],
         trim: true
     },
     description:{
         type: String,
-        required: [true, "description is required!"],
+        required: [true, 'description is required!'],
         trim: true
     },
     userId:{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+        ref: 'User',
         required: true
     },
 }, {
     timestamps: true
 });
 
-module.exports = mongoose.model("Post", postSchema);
+module.exports = mongoose.model('Post', postSchema);

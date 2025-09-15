@@ -4,6 +4,8 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
 
+import router from './routers/authRouter.js';
+
 const app = express();
 const PORT = process.env.PORT;
 
@@ -16,14 +18,16 @@ app.use(express.urlencoded({ extended: true }));
 mongoose
     .connect(process.env.MONGO_URI)
     .then(() => {
-        console.log("Database connected");
+        console.log('Database connected');
     })
     .catch((err) => {
         console.log(err);
     });
 
+app.use('/api/auth', router);
+
 app.get('/', (req, res) => {
-    res.json({ message: "Hello form the server" })
+    res.json({ message: 'Hello from the server' })
 });
 
 app.listen(process.env.PORT, () => {
