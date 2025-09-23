@@ -1,5 +1,9 @@
-import { hash } from "bcryptjs"
+import { hash, compare } from 'bcryptjs';
 
 export const doHash = (value, saltValue) => {
-    return result = hash(value, saltValue);
+    return hash(value, saltValue);
+}
+
+export const doHashValidation = (value, hashedValue) => {
+    return compare(value, hashedValue);
 }
