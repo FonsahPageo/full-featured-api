@@ -13,15 +13,15 @@ export const signupSchema = Joi.object({
             'any.required': 'Email is required',
             'string.min': 'Email must meet minimum required length of 6 characters'
         }),
-    password: Joi.string().min(6).required()
+    password: Joi.string().min(8).required()
         .pattern(new RegExp(
             "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};': \"\\\\|,.<>\\/\\?])[A-Za-z\\d!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/\\?]{8,30}$")
         )
         .messages({ 
-            'string.pattern.base': 'Password must be 6-30 characters long and include at least one uppercase, lowercase, number and special character',
+            'string.pattern.base': 'Password must be 8-30 characters long and include at least one uppercase, lowercase, number and special character',
             'string.empty': 'Password cannot be empty',
             'any.required': 'Password is required',
-            'string.min': 'Password must meet minimum required length of 6 characters'
+            'string.min': 'Password must meet minimum required length of 8 characters'
         })
 });
 
