@@ -49,3 +49,19 @@ export const signinSchema = Joi.object({
             'string.min': 'Password must meet minimum required length of 6 characters'
         })
 });
+
+export const acceptCodeSchema = Joi.object({
+    email: Joi.string()
+        .min(6)
+        .max(60)
+        .required()
+        .email({
+            tlds: { allow: ['com', 'net'] },
+        }).messages({
+            'string.email': 'Email must be a valid email of format username@domain.com',
+            'string.empty': 'Email cannot be empty',
+            'any.required': 'Email is required',
+            'string.min': 'Email must meet minimum required length of 6 characters'
+        }),
+        emailVerificationCode: Joi.number().required()
+})
