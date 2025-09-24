@@ -17,7 +17,7 @@ export const signupSchema = Joi.object({
         .pattern(new RegExp(
             "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};': \"\\\\|,.<>\\/\\?])[A-Za-z\\d!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/\\?]{8,30}$")
         )
-        .messages({ 
+        .messages({
             'string.pattern.base': 'Password must be 8-30 characters long and include at least one uppercase, lowercase, number and special character',
             'string.empty': 'Password cannot be empty',
             'any.required': 'Password is required',
@@ -42,7 +42,7 @@ export const signinSchema = Joi.object({
         .pattern(new RegExp(
             "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};': \"\\\\|,.<>\\/\\?])[A-Za-z\\d!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/\\?]{8,30}$")
         )
-        .messages({ 
+        .messages({
             'string.pattern.base': 'Password must be 8-30 characters long and include at least one uppercase, lowercase, number and special character',
             'string.empty': 'Password cannot be empty',
             'any.required': 'Password is required',
@@ -63,5 +63,18 @@ export const acceptCodeSchema = Joi.object({
             'any.required': 'Email is required',
             'string.min': 'Email must meet minimum required length of 6 characters'
         }),
-        emailVerificationCode: Joi.number().required()
-})
+    emailVerificationCode: Joi.number().required()
+});
+
+export const changePasswordSchema = Joi.object({
+    newPassword: Joi.string()
+        .required()
+        .pattern(new RegExp(
+            "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};': \"\\\\|,.<>\\/\\?])[A-Za-z\\d!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/\\?]{8,30}$")
+        ),
+    oldPassword: Joi.string()
+        .required()
+        .pattern(new RegExp(
+            "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};': \"\\\\|,.<>\\/\\?])[A-Za-z\\d!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/\\?]{8,30}$")
+        ),
+});
