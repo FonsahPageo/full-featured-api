@@ -1,5 +1,5 @@
 import { doHash, doHashValidation, hmacProcess } from '../utils/hashing.js';
-import { signupSchema, signinSchema, acceptCodeSchema, changePasswordSchema } from '../middlewares/validator.js';
+import { signupSchema, signinSchema, acceptCodeSchema, changePasswordSchema, acceptFPCodeSchema } from '../middlewares/validator.js';
 import User from '../models/usersModel.js';
 import jwt from 'jsonwebtoken';
 import { transport } from '../middlewares/sendMail.js';
@@ -259,4 +259,101 @@ export const changePassword = async (req, res) => {
     } catch (error) {
         console.log(error);
     }
-}
+};
+
+
+export const sendForgotPasswordCode = async (req, res) => {
+    const { email } = req.body;
+    try {
+        const existingUser = await User.findOne({ email });
+        if (!existingUser) {
+            return res.status(404).json({
+                success: false,
+                message: 'User does not exist!'
+            });
+        }
+        const codeValue = Math.floor(Math.random() * 1000000).toString();
+        let info = await transport.sendMail({
+            from: process.env.NODE_CODE_SENDING_EMAIL_ADDRESS,
+            to: existingUser.email,
+            subject: 'Password reset code',
+            html: '<h1>' + codeValue + '</h1>'
+        });
+
+        if (info.accepted[0] === existingUser.email) {
+            const hashedCodeValue = hmacProcess(
+                codeValue, process.env.HMAC_VERIFICATION_CODE_SECRET
+            );
+            existingUser.forgotPasswordCode = hashedCodeValue;
+            existingUser.forgotPasswordCodeValidation = Date.now();
+            await existingUser.save();
+            return res.status(200).json({
+                success: true,
+                message: 'Password reset code sent successfully'
+            })
+        }
+        return res.status(400).json({
+            success: true,
+            message: 'Failed to send passsword reset code'
+        })
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const verifyForgotPasswordCode = async (req, res) => {
+    const { email, emailVerificationCode, newPassword } = req.body;
+    try {
+        const { error, value } = acceptFPCodeSchema.validate({ email, emailVerificationCode, newPassword });
+        if (error) {
+            return res.status(401).json({
+                success: false,
+                message: error.details[0].message
+            });
+        }
+
+        const codeValue = emailVerificationCode.toString();
+        const existingUser = await User.findOne({ email }).select('+forgotPasswordCode +forgotPasswordCodeValidation');
+        if (!existingUser) {
+            return res.status(404).json({
+                success: false,
+                message: 'User does not exist!'
+            });
+        }
+
+        if (!existingUser.forgotPasswordCode || !existingUser.forgotPasswordCodeValidation) {
+            return res.status(400).json({
+                success: false,
+                message: 'Something is wrong with the code!'
+            })
+        }
+
+        if (Date.now() - existingUser.forgotPasswordCodeValidation > 5 * 60 * 1000) {
+            return res.status(400).json({
+                success: false,
+                message: 'Code has expired'
+            });
+        }
+
+        const hashedCodeValue = hmacProcess(codeValue, process.env.HMAC_VERIFICATION_CODE_SECRET);
+        if (hashedCodeValue === existingUser.forgotPasswordCode) {
+            const hashedPasswword = await doHash(newPassword, 12);
+            existingUser.password = hashedPasswword;
+            existingUser.forgotPasswordCode = undefined;
+            existingUser.forgotPasswordCodeValidation = undefined;
+            await existingUser.save();
+
+            return res.status(200).json({
+                success: true,
+                message: 'Your password has been succesfully modified.'
+            });
+        }
+
+        return res.status(400).json({
+            success: false,
+            message: 'An unexpected error occured. Please try again'
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};

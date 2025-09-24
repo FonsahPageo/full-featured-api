@@ -7,6 +7,7 @@ This is a full-featured API that supports user authentication while performing o
 - User registration & login with secure password hashing (`bcrypt`)
 - JWT-based authentication 
 - Email verification (with Gmail)
+- Password reset
 - Logout
 
 ## Tech stack
@@ -17,6 +18,7 @@ This is a full-featured API that supports user authentication while performing o
 - **Validation:** Joi
 - **Environment Config:** dotenv
 - **API Platform:** Postman
+- **Email sending:** Nodemailer
 
 ```
 index.js                    # Main Express app configuration/server entry point

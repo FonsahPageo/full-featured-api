@@ -78,3 +78,24 @@ export const changePasswordSchema = Joi.object({
             "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};': \"\\\\|,.<>\\/\\?])[A-Za-z\\d!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/\\?]{8,30}$")
         ),
 });
+
+export const acceptFPCodeSchema = Joi.object({
+    email: Joi.string()
+        .min(6)
+        .max(60)
+        .required()
+        .email({
+            tlds: { allow: ['com', 'net'] },
+        }).messages({
+            'string.email': 'Email must be a valid email of format username@domain.com',
+            'string.empty': 'Email cannot be empty',
+            'any.required': 'Email is required',
+            'string.min': 'Email must meet minimum required length of 6 characters'
+        }),
+    emailVerificationCode: Joi.number().required(),
+    newPassword: Joi.string()
+        .required()
+        .pattern(new RegExp(
+            "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};': \"\\\\|,.<>\\/\\?])[A-Za-z\\d!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/\\?]{8,30}$")
+        ),
+});
