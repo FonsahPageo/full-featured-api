@@ -1,4 +1,4 @@
-# **Node.js** API Tutorial with Node.js, Express, MongoDB, JWT Authentication
+# Full-featured API with Node.js, Express, MongoDB, JWT Authentication
 
 This is a full-featured API that supports user authentication while performing operations like user sign-up, sign-in, email verification, password reset, sign-out. Also supports CRUD operations for a blog-like post system.
 
@@ -61,9 +61,9 @@ utils/                      # Utility functions
 ### Clone the repository 
 
 ```bash
-git clone https://github.com/FonsahPageo/nodejs-api-tut.git
+git clone https://github.com/FonsahPageo/full-featured-api.git
 
-cd nodejs-api-tut
+cd full-featured-api
 
 npm install
 
