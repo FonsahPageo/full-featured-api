@@ -6,17 +6,17 @@ import {
 } from '../controllers/authControllers.js';
 import { identifier } from '../middlewares/identification.js';
 
-const router = express.Router();
+const authRouter = express.Router();
 
-router.post('/signup', signup);
-router.post('/signin', signin);
-router.post('/signout', identifier, signout);
+authRouter.post('/signup', signup);
+authRouter.post('/signin', signin);
+authRouter.post('/signout', identifier, signout);
 
-router.patch('/send-verification-code', identifier, sendVerificationCode);
-router.patch('/verify-verification-code', identifier, verifyVerificationCode);
+authRouter.patch('/send-verification-code', identifier, sendVerificationCode);
+authRouter.patch('/verify-verification-code', identifier, verifyVerificationCode);
 
-router.patch('/change-password', identifier, changePassword);
-router.patch('/send-forgot-password-code', identifier, sendForgotPasswordCode);
-router.patch('/verify-forgot-password-code', identifier, verifyForgotPasswordCode);
+authRouter.patch('/change-password', identifier, changePassword);
+authRouter.patch('/send-forgot-password-code', identifier, sendForgotPasswordCode);
+authRouter.patch('/verify-forgot-password-code', identifier, verifyForgotPasswordCode);
 
-export default router;
+export default authRouter;

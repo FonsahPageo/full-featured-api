@@ -4,7 +4,8 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
 
-import router from './routers/authRouter.js';
+import authRouter from './routers/authRouter.js';
+import postRouter from './routers/postRouter.js';
 
 const app = express();
 const PORT = process.env.PORT;
@@ -24,10 +25,11 @@ mongoose
         console.log(err);
     });
 
-app.use('/api/auth', router);
+app.use('/api/auth', authRouter);
+app.use('/api/auth', postRouter);
 
 app.get('/', (req, res) => {
-    res.json({ message: 'Hello from the server' })
+    res.json({ message: 'Hello from the server' });
 });
 
 app.listen(process.env.PORT, () => {
