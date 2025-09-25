@@ -1,7 +1,7 @@
 import { createPostSchema } from '../middlewares/validator.js';
 import Post from '../models/postsModel.js';
 
-export const getPosts = async (req, res) => {
+export const allPosts = async (req, res) => {
     const { page } = req.query;
     const postsPerPage = 10;
 
@@ -59,4 +59,23 @@ export const createPost = async (req, res) => {
     } catch (error) {
         console.log(error);
     }
-}
+};
+
+export const singlePost = async (req, res) => {
+    const { _id } = req.query;
+
+    try {
+        const result = await Post.findOne({ _id })
+            .populate({
+                path: 'userId',
+                select: 'email'
+            });
+        res.status(200).json({
+            success: true,
+            message: 'single post',
+            data: result
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};
