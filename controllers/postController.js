@@ -79,3 +79,80 @@ export const singlePost = async (req, res) => {
         console.log(error);
     }
 };
+
+export const updatePost = async (req, res) => {
+    const { title, description } = req.body;
+    const { _id } = req.query;
+    const { userId } = req.user;
+
+    try {
+        const { error, value } = createPostSchema.validate({
+            title,
+            description,
+            userId
+        });
+        if (error) {
+            return res.stats(401).json({
+                success: false,
+                message: error.details[0].message
+            });
+        }
+
+        const existingPost = await Post.findOne({ _id });
+        if (!existingPost) {
+            return res.status(404).json({
+                success: false,
+                message: 'Post unavailable'
+            });
+        }
+
+        if (existingPost.userId.toString() !== userId) {
+            return res.status(403).json({
+                success: false,
+                message: 'You are not authorized'
+            });
+        }
+
+        existingPost.title = title,
+            existingPost.description = description
+
+        const result = await existingPost.save();
+        res.status(200).json({
+            success: true,
+            message: 'Post Updated succesfully',
+            data: result
+        })
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const deletePost = async (req, res) => {
+    const { _id } = req.query;
+    const { userId } = req.user;
+
+    try {
+        const existingPost = await Post.findOne({ _id });
+        if (!existingPost) {
+            return res.status(404).json({
+                success: false,
+                message: 'Post does not exist'
+            });
+        }
+
+        if (existingPost.userId.toString() !== userId) {
+            return res.status(403).json({
+                success: false,
+                message: 'You are not authorized'
+            });
+        }
+
+        await Post.deleteOne({ _id });
+        res.status(200).json({
+            success: true,
+            message: 'Post deleted succesfully',
+        })
+    } catch (error) {
+        console.log(error);
+    }
+};
