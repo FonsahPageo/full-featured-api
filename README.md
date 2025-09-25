@@ -1,6 +1,6 @@
 # **Node.js** API Tutorial with Node.js, Express, MongoDB, JWT Authentication
 
-This is a full-featured API that supports user authentication while performing operations like user sign-up, sign-in, email verification, password reset. Also supports CRUD operations for a blog-like post system.
+This is a full-featured API that supports user authentication while performing operations like user sign-up, sign-in, email verification, password reset, sign-out. Also supports CRUD operations for a blog-like post system.
 
 ## Features
 
@@ -8,6 +8,9 @@ This is a full-featured API that supports user authentication while performing o
 - JWT-based authentication 
 - Email verification (with Gmail)
 - Password reset
+- Post creation
+- Viewing all posts & individual posts with the post ID
+- Updating and deleting posts
 - Logout
 
 ## Tech stack
@@ -34,6 +37,7 @@ routes/                     # Route definitions
 middlewares/                # Custom middleware
     |---sendMail.js         # Setup for sending emails
     |---validator.js        # Input Validation
+    |---identification.js   # User verification with JWT
 utils/                      # Utility functions
     |---hashing.js          # Hashing functions for different valuees
 ```
@@ -45,6 +49,12 @@ utils/                      # Utility functions
 
 - Stores user information during registration (email, password)
 - Uses bcrypt to hash passwords before storing for security
+- Email and password shemas are validated by Joi
+
+### Posts table
+
+- Stores various posts created by the user
+- Post schema validated by Joi
 
 ## Getting started
 
@@ -93,10 +103,30 @@ POST /signin
 #### Logout User
 POST /signout
 
-#### Send a verification code
+#### Send email verification code
 PATCH /send-verification-code
 
-#### Verify the verification code
-
+#### Verify the email verification code
 PATCH /verify-verification-code
+
+#### Send password reset verification code
+PATCH /send-forgot-password-code
+
+#### Verify the passwword reset verification code
+PATCH /verify-forgot-password-code
+
+#### Create a post
+POST /create-post
+
+#### Show all posts
+GET /all-posts
+
+#### Show a particular post by its ID
+GET /single-post?_id=<post_id>
+
+#### Update a post
+PUT /update-post?_id=<post_id>
+
+#### Delete a post
+DELETE delete-post?_id=<post_id>
 
