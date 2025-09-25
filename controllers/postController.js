@@ -1,3 +1,4 @@
+import { createPostSchema } from '../middlewares/validator.js';
 import Post from '../models/postsModel.js';
 
 export const getPosts = async (req, res) => {
@@ -25,6 +26,36 @@ export const getPosts = async (req, res) => {
             message: 'posts',
             data: result
         });
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const createPost = async (req, res) => {
+    const { title, description } = req.body;
+    const { userId } = req.user;
+
+    try {
+        const { error, value } = createPostSchema.validate({
+            title,
+            description,
+            userId
+        });
+        if (error) {
+            return res.stats(401).json({
+                success: false,
+                message: error.details[0].message
+            });
+        }
+
+        const result = await Post.create({
+            title, description, userId
+        });
+        res.status(201).json({
+            success: true,
+            message: 'Post created',
+            data: result
+        })
     } catch (error) {
         console.log(error);
     }

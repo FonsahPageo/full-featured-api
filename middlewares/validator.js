@@ -99,3 +99,15 @@ export const acceptFPCodeSchema = Joi.object({
             "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};': \"\\\\|,.<>\\/\\?])[A-Za-z\\d!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/\\?]{8,30}$")
         ),
 });
+
+export const createPostSchema = Joi.object({
+    title: Joi.string()
+        .min(3)
+        .max(60)
+        .required(),
+    description: Joi.string()
+        .min(3)
+        .max(600)
+        .required(),
+    userId: Joi.string().required()
+});
